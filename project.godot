@@ -1,0 +1,53 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node",
+"class": "ConfigHelperBase",
+"language": "GDScript",
+"path": "res://addons/config_table_plugin/config_table/ConfigHelperBase.gd"
+}, {
+"base": "Reference",
+"class": "ConfigTable",
+"language": "GDScript",
+"path": "res://addons/config_table_plugin/config_table/ConfigTable.gd"
+} ]
+_global_script_class_icons={
+"ConfigHelperBase": "",
+"ConfigTable": ""
+}
+
+[application]
+
+config/name="Config Table Plugin"
+run/main_scene="res://Test.tscn"
+config/icon="res://icon.png"
+
+[autoload]
+
+ConfigHelper="*res://config_table/ConfigHelper.gd"
+
+[config_table_plugin]
+
+root_directory="res://config_table"
+config_table_template_path="templates/ConfigTable.gd.template"
+config_helper_save_path="ConfigHelper.gd"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/config_table_plugin/plugin.cfg" )
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+environment/default_environment="res://default_env.tres"

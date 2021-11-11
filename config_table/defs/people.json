@@ -1,0 +1,19 @@
+[
+  {
+    "name": "姓名",
+    "id": "name"
+  },
+  {
+    "name": "年龄",
+    "id": "age",
+    "type": "Real"
+  },
+  {
+    "name": "家庭住址",
+    "id": "address"
+  },
+  {
+    "name": "手机号",
+    "id": "phone"
+  }
+]

@@ -4,6 +4,11 @@
     "id": "name"
   },
   {
+    "name": "注释",
+    "id": "explained1",
+    "ignore": true
+  },
+  {
     "name": "年龄",
     "id": "age",
     "type": "Real"

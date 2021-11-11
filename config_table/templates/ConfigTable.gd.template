@@ -22,3 +22,7 @@ func _get_data_head_def():
 # func by_field1(v) -> DataType:
 #   return by("field1", v)
 {BY_FIELD_FUNC_LIST}
+
+{ALL_BY_FIELD_FUNC_LIST}
+
+{HAS_FIELD_FUNC_LIST}

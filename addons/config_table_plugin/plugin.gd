@@ -38,6 +38,8 @@ var EXPORT_CONFIG_HELPER_NAME := tr('Export Config Helper')
 var EXPORT_ALL_NAME := tr('Export All')
 var CLEAN_ALL_CONFIG_TABLES_NAME := tr('Clean All Config Tables')
 
+const CONFIG_HELPER_AUTOLOAD_NAME := 'ConfigHelper'
+
 enum {
 	EXPORT_ALL_EXCELS_MENU_ID = 0,
 	EXPORT_ALL_GDSCRIPTS_MENU_ID,
@@ -58,14 +60,25 @@ func _enter_tree() -> void:
 	get_editor_interface().get_resource_filesystem().scan()
 	
 	create_tool_menu()
+	
+	check_and_update_config_helper_singleton()
 
 func _exit_tree() -> void:
-	
-	
 	destory_tool_menu()
 	
+	if ProjectSettings.has_setting('autoload/%s' % CONFIG_HELPER_AUTOLOAD_NAME):
+		remove_autoload_singleton(CONFIG_HELPER_AUTOLOAD_NAME)
 
 #---- Methods -----
+func check_and_update_config_helper_singleton():
+	if ProjectSettings.has_setting('autoload/%s' % CONFIG_HELPER_AUTOLOAD_NAME):
+		remove_autoload_singleton(CONFIG_HELPER_AUTOLOAD_NAME)
+	var path = ProjectSettings.localize_path(root_dir)
+	path = path_combine(path, config_helper_save_path)
+	var dir = Directory.new()
+	if dir.file_exists(path):
+		add_autoload_singleton(CONFIG_HELPER_AUTOLOAD_NAME, path)
+
 func create_tool_menu():
 	tool_menu = PopupMenu.new()
 	add_tool_submenu_item(TOOL_MENU_NAME, tool_menu)
@@ -232,6 +245,7 @@ func export_config_helper(scan:=true):
 	print('Export config helper done!')
 	if scan:
 		get_editor_interface().get_resource_filesystem().scan()
+	check_and_update_config_helper_singleton()
 
 func export_all(scan:=true):
 	export_all_excels(false)

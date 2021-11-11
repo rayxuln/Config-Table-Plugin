@@ -1,12 +1,14 @@
 [
   {
     "name": "姓名",
-    "id": "name"
+    "id": "name",
+    "comment": "某人的姓名"
   },
   {
     "name": "注释",
     "id": "explained1",
-    "ignore": true
+    "ignore": true,
+    "comment": "注释而已"
   },
   {
     "name": "年龄",
@@ -15,7 +17,8 @@
   },
   {
     "name": "家庭住址",
-    "id": "address"
+    "id": "address",
+    "comment": "真实的地址"
   },
   {
     "name": "手机号",

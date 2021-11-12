@@ -10,7 +10,7 @@ extends ConfigTable
 
 class DataType:
 	extends Reference
-	var job: String
+	var test: String
 
 	func _init(field_value_map := {}):
 		for key in field_value_map.keys():
@@ -26,21 +26,21 @@ func by(field_name, v) -> DataType:
 
 func _get_data_head_def():
 	return [
-		"job",
+		"test",
 	]
 
 # func by_field1(v) -> DataType:
 #   return by("field1", v)
-func by_job(v) -> DataType:
-	return by("job", v)
+func by_test(v) -> DataType:
+	return by("test", v)
 
 
 
-func all_by_job(v) -> Array:
-	return _all_by("job", v)
+func all_by_test(v) -> Array:
+	return _all_by("test", v)
 
 
 
-func has_job(v) -> bool:
-	return has("job", v)
+func has_test(v) -> bool:
+	return has("test", v)
 

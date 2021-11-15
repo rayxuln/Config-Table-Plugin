@@ -77,7 +77,7 @@ func check_and_update_config_helper_singleton():
 	path = path_combine(path, config_helper_save_path)
 	var dir = Directory.new()
 	if dir.file_exists(path):
-		add_autoload_singleton(CONFIG_HELPER_AUTOLOAD_NAME, path)
+		call_deferred('add_autoload_singleton', CONFIG_HELPER_AUTOLOAD_NAME, path)
 
 func create_tool_menu():
 	tool_menu = PopupMenu.new()

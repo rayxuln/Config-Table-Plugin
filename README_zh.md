@@ -2,6 +2,8 @@
 
 用于Godot引擎的插件，可将Excel表格文件转换成GDScript文件，以便在Godot中使用。
 
+[转换工具的源码](https://github.com/rayxuln/GDScriptConfigTableTool)
+
 ## 许可证
 
 MIT

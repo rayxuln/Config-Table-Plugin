@@ -44,6 +44,10 @@ config_helper_save_path="ConfigHelper.gd"
 
 enabled=PoolStringArray( "res://addons/config_table_plugin/plugin.cfg" )
 
+[mono]
+
+project/assembly_name="Config Table Plugin"
+
 [physics]
 
 common/enable_pause_aware_picking=true

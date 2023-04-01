@@ -5,3 +5,4 @@ export_presets.cfg
 .mono
 .DS_Store
 *.pdb
+.godot

@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 
 var template_path:String
 
@@ -21,7 +21,7 @@ func create(config_table_path_list:Array):
 	gen_code(gen_map)
 
 func gen_decription():
-	var date:String = '{year}-{month}-{day} {hour}:{minute}:{second}'.format(OS.get_datetime())
+	var date:String = '{year}-{month}-{day} {hour}:{minute}:{second}'.format(Time.get_datetime_dict_from_system())
 	var empty_str = '                                    '
 	var left_pad = floor((empty_str.length() - date.length()) / 2)
 	var right_pad = ceil((empty_str.length() - date.length()) / 2)
@@ -60,8 +60,8 @@ func gen_indent(n:int):
 	return res
 
 func read_template():
-	var file = File.new()
-	var err = file.open(template_path, File.READ)
+	var file = FileAccess.open(template_path, FileAccess.READ)
+	var err = FileAccess.get_open_error()
 	if err != OK:
 		printerr('Can\'t open tempalte file: %s, code: %s' % [template_path, err])
 		return
@@ -70,14 +70,13 @@ func read_template():
 
 func save_to(path):
 	var err
-	var dir = Directory.new()
-	if dir.file_exists(path):
-		err = dir.remove(path)
+	if FileAccess.file_exists(path):
+		err = DirAccess.remove_absolute(path)
 		if err != OK:
 			printerr('Can\'t remove the old file: %s, code: %s' % [path, err])
 			return
-	var file = File.new()
-	err = file.open(path, File.WRITE)
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	err = FileAccess.get_open_error()
 	if err != OK:
 		printerr('Can\'t open file: %s, code: %s' % [path, err])
 		return

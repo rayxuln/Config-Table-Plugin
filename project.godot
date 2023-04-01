@@ -6,28 +6,13 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Node",
-"class": "ConfigHelperBase",
-"language": "GDScript",
-"path": "res://addons/config_table_plugin/config_table/ConfigHelperBase.gd"
-}, {
-"base": "Reference",
-"class": "ConfigTable",
-"language": "GDScript",
-"path": "res://addons/config_table_plugin/config_table/ConfigTable.gd"
-} ]
-_global_script_class_icons={
-"ConfigHelperBase": "",
-"ConfigTable": ""
-}
+config_version=5
 
 [application]
 
 config/name="Config Table Plugin"
 run/main_scene="res://Test.tscn"
+config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 
 [autoload]
@@ -42,7 +27,7 @@ config_helper_save_path="ConfigHelper.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/config_table_plugin/plugin.cfg" )
+enabled=PackedStringArray("res://addons/config_table_plugin/plugin.cfg")
 
 [mono]
 
@@ -54,4 +39,4 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
-environment/default_environment="res://default_env.tres"
+environment/defaults/default_environment="res://default_env.tres"

@@ -1,0 +1,21 @@
+[
+  {
+	"name": "测试名1",
+	"id": "test_name_1",
+	"type": "String"
+  },
+  {
+	"name": "测试名2",
+	"id": "test_name_2",
+	"type": "Real"
+  },
+  {
+	"name": "数组类型",
+	"id": "test_name_3",
+	"type": "Dictionary"
+  },
+  {
+	"name": "bu666",
+	"id": "test_name_4"
+  }
+]

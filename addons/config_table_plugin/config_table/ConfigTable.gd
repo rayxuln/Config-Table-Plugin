@@ -1,8 +1,8 @@
-extends Reference
+extends RefCounted
 class_name ConfigTable
 
 class Iterator:
-	extends Reference
+	extends RefCounted
 	
 	var current_index:int
 	

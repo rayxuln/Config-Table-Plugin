@@ -1,4 +1,4 @@
-tool
+@tool
 extends EditorPlugin
 
 const ROOT_DIR_SETTING := 'config_table_plugin/root_directory'
@@ -75,15 +75,14 @@ func check_and_update_config_helper_singleton():
 		remove_autoload_singleton(CONFIG_HELPER_AUTOLOAD_NAME)
 	var path = ProjectSettings.localize_path(root_dir)
 	path = path_combine(path, config_helper_save_path)
-	var dir = Directory.new()
-	if dir.file_exists(path):
+	if FileAccess.file_exists(path):
 		call_deferred('add_autoload_singleton', CONFIG_HELPER_AUTOLOAD_NAME, path)
 
 func create_tool_menu():
 	tool_menu = PopupMenu.new()
 	add_tool_submenu_item(TOOL_MENU_NAME, tool_menu)
 	
-	tool_menu.connect('id_pressed', self, '_on_tool_menu_pressed')
+	tool_menu.connect('id_pressed', Callable(self, '_on_tool_menu_pressed'))
 	
 	tool_menu.add_item(EXPORT_ALL_EXCELS_MENU_NAME, EXPORT_ALL_EXCELS_MENU_ID)
 	tool_menu.add_item(EXPORT_ALL_GDSCRIPTS_MENU_NAME, EXPORT_ALL_GDSCRIPTS_MENU_ID)
@@ -121,10 +120,9 @@ func path_combine(base_dir, dir_name) -> String:
 	return '%s/%s' % [base_dir, dir_name]
 
 func check_and_create_directories():
-	var dir = Directory.new()
 	root_dir = ProjectSettings.globalize_path(root_dir)
-	if not dir.dir_exists(root_dir):
-		var err = dir.make_dir_recursive(root_dir)
+	if not DirAccess.dir_exists_absolute(root_dir):
+		var err = DirAccess.make_dir_recursive_absolute(root_dir)
 		if err != OK:
 			printerr('Can\'t make dir for root: %s' % root_dir)
 			return
@@ -134,46 +132,44 @@ func check_and_create_directories():
 	defs_dir = path_combine(root_dir, DEFS_DIR)
 	templates_dir = path_combine(root_dir, TEMPLATES_DIR)
 	
-	if not dir.dir_exists(config_tables_dir):
-		var err = dir.make_dir_recursive(config_tables_dir)
+	if not DirAccess.dir_exists_absolute(config_tables_dir):
+		var err = DirAccess.make_dir_recursive_absolute(config_tables_dir)
 		if err != OK:
 			printerr('Can\'t make dir for: %s' % config_tables_dir)
 			return
-	if not dir.dir_exists(excels_dir):
-		var err = dir.make_dir_recursive(excels_dir)
+	if not DirAccess.dir_exists_absolute(excels_dir):
+		var err = DirAccess.make_dir_recursive_absolute(excels_dir)
 		if err != OK:
 			printerr('Can\'t make dir for: %s' % excels_dir)
 			return
-	if not dir.dir_exists(defs_dir):
-		var err = dir.make_dir_recursive(defs_dir)
+	if not DirAccess.dir_exists_absolute(defs_dir):
+		var err = DirAccess.make_dir_recursive_absolute(defs_dir)
 		if err != OK:
 			printerr('Can\'t make dir for: %s' % defs_dir)
 			return
-	if not dir.dir_exists(templates_dir):
-		var err = dir.make_dir_recursive(templates_dir)
+	if not DirAccess.dir_exists_absolute(templates_dir):
+		var err = DirAccess.make_dir_recursive_absolute(templates_dir)
 		if err != OK:
 			printerr('Can\'t make dir for: %s' % templates_dir)
 			return
 	
 
 func check_and_copy_config_table_template():
-	var dir = Directory.new()
 	config_table_template_actual_path = path_combine(root_dir, config_table_template_path)
 	var source = path_combine(get_current_workdirectory(), CONFIG_TABLE_TEMPLATE_ACTUAL_PATH)
-	var do_copy = not dir.file_exists(config_table_template_actual_path)
+	var do_copy = not FileAccess.file_exists(config_table_template_actual_path)
 	if do_copy:
-		var err = dir.copy(source, config_table_template_actual_path)
+		var err = DirAccess.copy_absolute(source, config_table_template_actual_path)
 		if err != OK:
 			printerr('Can\'t copy template file from %s to: %s' % [source, config_table_template_actual_path])
 			return
 
 func check_and_copy_config_helper_template():
-	var dir = Directory.new()
 	config_helper_template_actual_path = path_combine(root_dir, config_helper_template_path)
 	var source = path_combine(get_current_workdirectory(), CONFIG_HELPER_TEMPLATE_ACTUAL_PATH)
-	var do_copy = not dir.file_exists(config_helper_template_actual_path)
+	var do_copy = not FileAccess.file_exists(config_helper_template_actual_path)
 	if do_copy:
-		var err = dir.copy(source, config_helper_template_actual_path)
+		var err = DirAccess.copy_absolute(source, config_helper_template_actual_path)
 		if err != OK:
 			printerr('Can\'t copy template file from %s to: %s' % [source, config_helper_template_actual_path])
 			return
@@ -182,13 +178,13 @@ func execute_gdscript_config_table_tool(args:=[], show_output:=false):
 	var e = path_combine(get_current_workdirectory(), GDSCRIPT_CONFIG_TABLE_TOOL_PATH)
 	e = ProjectSettings.globalize_path(e)
 	var output := []
-	var code = OS.execute(e, args, true, output, true)
+	var code = OS.execute(e, args, output, true, true)
 	if code != 0:
 		printerr('Execute the gdscript config table tool failed: %s' % e)
 		printerr('Code: %s' % code)
 		printerr('Output: %s' % [output])
 	else:
-		if show_output and not output.empty():
+		if show_output and not output.is_empty():
 			if output.size() != 1 or output[0] != '':
 				print(output)
 	get_editor_interface().get_resource_filesystem().scan()
@@ -200,12 +196,11 @@ func create_config_helper_genreator():
 	config_helper_generator = ConfigHelperGenerator.new(config_helper_template_actual_path)
 
 func get_config_table_path_list():
-	var dir = Directory.new()
-	var err = dir.open(config_tables_dir)
-	if err != OK:
-		printerr('Can\'t access config tables dir: %s, code: %s' % [config_tables_dir, err])
+	var dir = DirAccess.open(config_tables_dir)
+	if dir == null:
+		printerr('Can\'t access config tables dir: %s, code: %s' % [config_tables_dir, DirAccess.get_open_error()])
 		return []
-	err = dir.list_dir_begin(true, true)
+	var err = dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	if err != OK:
 		printerr('Can\'t list dir begin at: %s, code: %s' % [config_tables_dir, err])
 		return []
@@ -220,10 +215,10 @@ func get_config_table_path_list():
 	return res
 
 func get_config_helper_save_path():
-	var path = config_helper_save_path
-	if path.is_abs_path():
+	var path:String = config_helper_save_path
+	if path.is_absolute_path():
 		path = ProjectSettings.globalize_path(path)
-	if path.is_rel_path():
+	if path.is_relative_path():
 		path = path_combine(root_dir, path)
 	return path
 
@@ -257,12 +252,11 @@ func export_all(scan:=true):
 		get_editor_interface().get_resource_filesystem().scan()
 
 func clean_all_config_tables(scan:=true, with_config_helper:=true):
-	var dir = Directory.new()
-	var err = dir.open(config_tables_dir)
-	if err != OK:
-		printerr('Can\'t open config tables directory: %s, code: %s' % [config_tables_dir, err])
+	var dir = DirAccess.open(config_tables_dir)
+	if dir == null:
+		printerr('Can\'t open config tables directory: %s, code: %s' % [config_tables_dir, DirAccess.get_open_error()])
 		return
-	err = dir.list_dir_begin(true, true)
+	var err = dir.list_dir_begin() # TODOGODOT4 fill missing arguments https://github.com/godotengine/godot/pull/40547
 	if err != OK:
 		printerr('Can\'t list dir begin of: %s, code: %s' % [config_tables_dir, err])
 		return

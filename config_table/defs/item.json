@@ -1,0 +1,22 @@
+[
+  {
+	"name": "ID",
+	"id": "id",
+	"type": "Real"
+  },
+  {
+	"name": "物品名",
+	"id": "name",
+	"type": "String"
+  },
+  {
+	"name": "属性",
+	"id": "attr",
+	"type": "Dictionary"
+  },
+  {
+	"name": "价格",
+	"id": "cost",
+	"type": "Real"
+  }
+]
